@@ -13,7 +13,7 @@ function y = scan_means_in_folder(folder)
         end
         
         i_name=strcat(name, ext);
-        mn=image_mean(i_name);
+        mn=image_mean(imread(i_name));
         disp(name);
         disp(mn);
     end
