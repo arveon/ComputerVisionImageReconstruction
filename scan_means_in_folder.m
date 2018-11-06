@@ -1,5 +1,8 @@
 function y = scan_means_in_folder(folder)
-    files=dir(folder);    
+    files=dir(folder);
+    means = zeros(numel(files), 3);
+    
+    counter=1;
     for i=2:numel(files)
         %if is a directory, skip it
         if files(i).isdir
@@ -12,11 +15,11 @@ function y = scan_means_in_folder(folder)
             continue
         end
         
-        i_name=strcat(name, ext);
+        i_name=strcat(filepath, name, ext);
+        
         mn=image_mean(imread(i_name));
-        disp(name);
-        disp(mn);
+        means(counter,[1,2,3])=mn;
+        counter=counter+1;
     end
-    
-    
+    y=means(1:counter-1,:);  
 end
