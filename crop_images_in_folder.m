@@ -29,7 +29,7 @@ function y = crop_images_in_folder(folder)
         image_c=image(1+dif_y/2:side+dif_y/2, 1+dif_x/2:side+dif_x/2, :);
         
         %save image
-        path=sprintf("%s%s%01d%s",folder,"/", i-2, ext);
+        path=sprintf("%s%01d%s","modified/",i-2, ext);
         imwrite(image_c,path);               
     end
 end
