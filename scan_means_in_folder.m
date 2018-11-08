@@ -11,7 +11,7 @@ function y = scan_means_in_folder(folder)
         
         %ignore all but selected extensions
         [filepath, name, ext] = fileparts(files(i).name);
-        if ~strcmp(ext, '.bmp') && ~strcmp(ext, '.jpg') && ~strcmp(ext, '.png')
+        if ~strcmp(ext, '.bmp') && ~strcmp(ext, '.jpg') && ~strcmp(ext, '.png') && ~strcmp(ext, '.JPG')
             continue
         end
         

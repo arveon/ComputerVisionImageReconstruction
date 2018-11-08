@@ -82,10 +82,6 @@ function y = reconstruct_image(image_path, sidesize, means_filepath, dataset_fol
     subplot(1,2,1), imshow(image_c), title('Original')
     subplot(1,2,2), imshow(image_r), title('Reconstructed')
     
-    
-    
-    %for each block find an image with closest mean distance
-    
-    
+    imwrite(image_r,"result.jpg");
     
 end

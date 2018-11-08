@@ -4,9 +4,10 @@ function y = get_closest_mean(all_means, image_mean)
     
     
     min_dist=all_means(1)+all_means(1)+all_means(1);
+    min_id=1;
     
     counter=1;
-    id=1;
+    id=[];
     
     for i=2:rows
             %i+rows and i+rows*2 instead of i+1 and i+2 is because it goes through
@@ -15,12 +16,26 @@ function y = get_closest_mean(all_means, image_mean)
             
             dist = abs(image_mean-cur_mean);
             simple_dist=dist(1)+dist(2)+dist(3);
-            if(simple_dist < min_dist)
+            
+            if simple_dist < 3 && simple_dist < min_dist 
+                id(counter)=i;
                 min_dist = simple_dist;
-                id=i;
+                min_id=i;
                 counter=counter+1;
-            end
+            elseif simple_dist < 15
+                id(counter)=i;
+                counter=counter+1;
+            else
+                if simple_dist < min_dist
+                min_dist = simple_dist;
+                min_id=i;
+            end     
     end
-    
-    y=id;
+    if numel(id)==0
+        y = min_id;
+    else
+        rand=randi([1,counter-1]);
+        id
+        y=id(rand);
+    end
 end
