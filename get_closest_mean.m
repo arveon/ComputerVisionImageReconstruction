@@ -11,7 +11,7 @@ function y = get_closest_mean(all_means, image_mean)
     %calculate weights for colours based on image mean
     %colour with largest value will have largest weight
     %color with lowest value will have lowest weight
-    weights = rescale(image_mean,1,3).^2;%bring numbers to 1-2 range
+    weights = rescale(image_mean,1,2);%bring numbers to 1-2 range
     %make sure there are no 0 in weights
     %weights(weights==0)=1;
     
