@@ -61,7 +61,6 @@ function y = reconstruct_image(image_path, sidesize, means_filepath, dataset_fol
             
             rep_img=uint8(imresize(rep_img, [sidesize NaN]));
             i
-            j
             
 %             rep_img=fragment;
 
