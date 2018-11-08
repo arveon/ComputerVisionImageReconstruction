@@ -1,4 +1,5 @@
-function y = reconstruct_image(image, sidesize)
+function y = reconstruct_image(image_path, sidesize, means_filepath, dataset_folder)
+    image=imread(image_path);
     [rows, cols, channels] = size(image);
     %check if image is black and white and if it is, generate an rgb
     %version with duplicate values in other channels
@@ -6,10 +7,10 @@ function y = reconstruct_image(image, sidesize)
         image=repmat(image,[1,1,3]);
     end
     
+    means=dlmread(means_filepath,',');
     
-    %check if image can be split into sidesizexsidesize blocks evenly
+    %check if image can be split into sidesize blocks evenly
     %crop it if it can't
-    
     remx=mod(cols,sidesize);
     remy=mod(rows,sidesize);
     
@@ -49,11 +50,28 @@ function y = reconstruct_image(image, sidesize)
             
             %find the best image to describe the block
             frag_mean=image_mean(fragment);
-            frag_mean
+            replacement=get_closest_mean(means,frag_mean);
+            rep_path=sprintf("%s/%01d%s", dataset_folder,replacement,".jpg");
+            rep_img=imread(rep_path);
+            %make sure b&w images are converted to rgb
+            [~,~,new_channels] = size(rep_img);
+            if new_channels == 1
+                rep_img=repmat(rep_img,[1,1,3]);
+            end
+            
+            rep_img=uint8(imresize(rep_img, [sidesize NaN]));
+            i
+            j
+            
+%             rep_img=fragment;
+
+            size(fragment);
+            size(rep_img);
+            
             
             %insert the image from dataset that best corresponds to this
             %block
-            image_r(cury:cury+sidesize,curx:curx+sidesize,:)=fragment;
+            image_r(cury:cury+sidesize-1,curx:curx+sidesize-1,:)=rep_img;
             
         end
     end

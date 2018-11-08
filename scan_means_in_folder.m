@@ -15,7 +15,7 @@ function y = scan_means_in_folder(folder)
             continue
         end
         
-        i_name=strcat(filepath, name, ext);
+        i_name=strcat(folder,"/", name, ext);
         
         mn=image_mean(imread(i_name));
         means(counter,[1,2,3])=mn;
