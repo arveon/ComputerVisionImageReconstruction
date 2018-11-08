@@ -1,14 +1,17 @@
 function y = crop_images_in_folder(folder)
-    files=dir(folder);    
+    files=dir(folder);
+    num_skipped = 1;
     for i=2:numel(files)
         %if is a directory, skip it
         if files(i).isdir
+            num_skipped= num_skipped+1;
             continue
         end
         
         %ignore all but selected extensions
         [filepath, name, ext] = fileparts(files(i).name);
         if ~strcmp(ext, '.bmp') && ~strcmp(ext, '.jpg') && ~strcmp(ext, '.png') && ~strcmp(ext, '.JPG')
+            num_skipped= num_skipped+1;
             continue
         end
         
@@ -29,7 +32,7 @@ function y = crop_images_in_folder(folder)
         image_c=image(1+dif_y/2:side+dif_y/2, 1+dif_x/2:side+dif_x/2, :);
         
         %save image
-        path=sprintf("%s%01d%s","modified/",i-2, ext);
+        path=sprintf("%s%s%01d%s",folder,"/modified/",i-num_skipped, ext);
         imwrite(image_c,path);               
     end
 end
