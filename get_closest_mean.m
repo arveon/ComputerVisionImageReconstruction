@@ -24,16 +24,15 @@ function y = get_closest_mean(all_means, image_mean)
             %simple_dist=dist(1)+dist(2)+dist(3);
             weighted_dist = dist(1)/weights(1) + dist(2)/weights(2) + dist(3)/weights(3);            
             
-%             if weighted_dist < 3 && weighted_dist < min_dist 
-%                 id(counter)=i;
-%                 min_dist = weighted_dist;
-%                 min_id=i;
-%                 counter=counter+1;
-%             elseif weighted_dist < 3
-%                 id(counter)=i;
-%                 counter=counter+1;
-%             else
-            if weighted_dist < min_dist
+            if weighted_dist < 25 && weighted_dist < min_dist 
+                id(counter)=i;
+                min_dist = weighted_dist;
+                min_id=i;
+                counter=counter+1;
+            elseif weighted_dist < 25
+                id(counter)=i;
+                counter=counter+1;
+            elseif weighted_dist < min_dist
                 min_dist = weighted_dist;
                 min_id=i;
             end
