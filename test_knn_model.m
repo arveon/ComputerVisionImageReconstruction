@@ -1,15 +1,12 @@
-function percent = test_knn_model(mdl, test_folder, expected_label)
-    % get the means
-    test_means = scan_means_in_folder(test_folder);
+function percent = test_knn_model(mdl, test_means, expected_labels)
     amount = size(test_means);
     amount = amount(1);
-    
-     count = 1;
-     correct = 0;
-     incorrect = 0;
+    count = 1;
+    correct = 0;
+    incorrect = 0;
     while count<=amount
         [label score cost] = predict(mdl, test_means(count));
-        if(strcmp(label, expected_label)==1)
+        if(strcmp(label, expected_labels(count))==1)
            correct = correct + 1;
         else
             incorrect = incorrect + 1;
