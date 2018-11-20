@@ -40,9 +40,9 @@ function y = gabor_feature(image_folder,name_of_the_file)
     dlmwrite("./modified/"+name_of_the_file, gabor_features(1:counter-1,1), 'precision', 8);
     y = gabor_features(1:counter-1,:);
 end
-function y = edge_feature(image_folder,name_of_the_file)    
+function y = edge_feature(image_folder,name_of_the_file,number_of_bins)    
     images = dir(image_folder);
-    edge_features = zeros(numel(images), 72);
+    edge_features = zeros(numel(images), number_of_bins);
     %Calculate edges and removes everything elese
     fudgeFactor = .5;    
     counter=1;
@@ -52,6 +52,7 @@ function y = edge_feature(image_folder,name_of_the_file)
             continue
         end
         clc
+        name_of_the_file
         sprintf('%d%%',round(i/numel(images)*100))
         %ignore all but selected extensions
         [filepath, name, ext] = fileparts(images(i).name);
@@ -64,7 +65,7 @@ function y = edge_feature(image_folder,name_of_the_file)
         [feature,viz] = extractHOGFeatures(edge_image);
         idx = feature > 0;
         %Use to remove the 0 values from the hist
-        [x,y] = histcounts(feature(idx),72);
+        [x,y] = histcounts(feature(idx),number_of_bins);
         %[x,y] = histcounts(feature,72);
         edge_features(counter,:) = x;
         counter=counter+1;
@@ -85,7 +86,7 @@ function y = labels(image_folder,label)
         end
         counter = counter + 1;
     end
-    y = cellstr(labels(1:numel(files)-2));
+    y = cellstr(labels(1:counter-4));
 end
 
 function y = load_features_from_file(feature_file)

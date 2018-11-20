@@ -1,6 +1,6 @@
-function y = prepare_image_set(folder)
+function y = prepare_image_set(folder,file_name)
     crop_images_in_folder(folder);
     pause(1);
-    meanspath=sprintf("%s%s",folder,"/means.data");
+    meanspath=sprintf("%s%s",folder,"/"+file_name);
     generate_mean_file(folder, meanspath);
 end
