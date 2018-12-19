@@ -15,7 +15,7 @@ function y = crop_images_in_folder(folder)
             continue
         end
         
-        image=imread(sprintf("%s%s%s",filepath, name, ext));
+        image=load_image(sprintf("%s%s%s",filepath, name, ext));
         
         %check if image can be split into sidesize blocks evenly
         [rows, cols, ~] = size(image);

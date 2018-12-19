@@ -1,13 +1,38 @@
-function y = reconstruct_image(image_path, sidesize, means_filepath, dataset_folder)
+function y = reconstruct_image(image_path, sidesize, img_per_row, means_filepath, dataset_folder)
     image=imread(image_path);
+    
     [rows, cols, channels] = size(image);
     %check if image is black and white and if it is, generate an rgb
     %version with duplicate values in other channels
     if channels == 1
         image=repmat(image,[1,1,3]);
-    end
+    end    
     
+    info = imfinfo(image_path);
+    if isfield(info,'Orientation')
+       orient = info(1).Orientation;
+       switch orient
+         case 2
+            image = image(:,end:-1:1,:);         %right to left
+         case 3
+            image = image(end:-1:1,end:-1:1,:);  %180 degree rotation
+         case 4
+            image = image(end:-1:1,:,:);         %bottom to top
+         case 5
+            image = permute(image, [2 1 3]);     %counterclockwise and upside down
+         case 6
+            image = rot90(image,3);              %undo 90 degree by rotating 270
+         case 7
+            image = rot90(image(end:-1:1,:,:));  %undo counterclockwise and left/right
+         case 8
+            image = rot90(image);                %undo 270 rotation by rotating 90
+         otherwise
+            warning(sprintf('unknown orientation %g ignored\n', orient));
+       end
+    end
     means=dlmread(means_filepath,',');
+    
+    
     
     %check if image can be split into sidesize blocks evenly
     %crop it if it can't
@@ -24,8 +49,12 @@ function y = reconstruct_image(image_path, sidesize, means_filepath, dataset_fol
     sx=cols/sidesize;
     sy=rows/sidesize;
     
+    finalx=sidesize*img_per_row;
+    finaly=rows*cols/finalx;
+    img_per_col=finaly/sidesize;
+    
     %reconstruction
-    image_r=zeros(rows,cols,3);
+    image_r=zeros(finaly,finalx,3);
     
     for i=0:sy-1
         for j=0:sx-1
@@ -36,6 +65,8 @@ function y = reconstruct_image(image_path, sidesize, means_filepath, dataset_fol
             
             curx=j*sidesize;
             cury=i*sidesize;
+            
+%             currepx=i*
             
             %at start they need to be 1, since it's 1 indexed
             if curx==0
@@ -61,14 +92,11 @@ function y = reconstruct_image(image_path, sidesize, means_filepath, dataset_fol
             
             rep_img=uint8(imresize(rep_img, [sidesize NaN]));
             
-            
+            clc
             i
             j
             sy-1
             
-            
-%             rep_img=fragment;
-
             size(fragment);
             size(rep_img);
             

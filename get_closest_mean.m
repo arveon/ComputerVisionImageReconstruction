@@ -1,17 +1,23 @@
 %returns id of a row in all_means that is the closest to image_mean
 function y = get_closest_mean(all_means, image_mean)
-    [rows, cols] = size(all_means);
+    [rows, ~] = size(all_means);
     
-    min_dist=1000;
-    min_id=0;
+    lowest_dist=10000;
+    lowest_id = 1;
     
-    counter=1;
-    id=[];
+    lowest_dist1=10000;
+    lowest_id1=1;
+    
+    lowest_dist2=10000;
+    lowest_id2=1;
+    
+    lowest_dist3=10000;
+    lowest_id3=1;
     
     %calculate weights for colours based on image mean
     %colour with largest value will have largest weight
     %color with lowest value will have lowest weight
-    weights = rescale(image_mean,1,2);%bring numbers to 1-2 range
+     weights = rescale(image_mean,1,2);%bring numbers to 1-2 range
     %make sure there are no 0 in weights
     %weights(weights==0)=1;
     
@@ -21,27 +27,26 @@ function y = get_closest_mean(all_means, image_mean)
             cur_mean=[all_means(i), all_means(i+rows),all_means(i+rows*2)];
             
             dist = abs(cur_mean - image_mean);
-            %simple_dist=dist(1)+dist(2)+dist(3);
-            weighted_dist = dist(1)/weights(1) + dist(2)/weights(2) + dist(3)/weights(3);            
+
+            weighted_dist = sqrt(dist(1)^2+dist(2)^2+dist(3)^2);
             
-            if weighted_dist < 25 && weighted_dist < min_dist 
-                id(counter)=i;
-                min_dist = weighted_dist;
-                min_id=i;
-                counter=counter+1;
-            elseif weighted_dist < 25
-                id(counter)=i;
-                counter=counter+1;
-            elseif weighted_dist < min_dist
-                min_dist = weighted_dist;
-                min_id=i;
+            if weighted_dist < lowest_dist1
+                lowest_id1 = i;
+                lowest_dist1 = weighted_dist;
+            elseif weighted_dist < lowest_dist2  
+                lowest_id2 = i;
+                lowest_dist2 = weighted_dist;
+            elseif weighted_dist < lowest_dist3
+                lowest_id3 = i;
+                lowest_dist3 = weighted_dist;
             end
-            
     end
-    if numel(id)==0
-        y = min_id;
-    else
-        rand=randi([1,counter-1]);
-        y=id(rand)
+    a=randi([1 3],1,1);
+    if a == 1
+        y = lowest_id1;
+    elseif a == 2
+        y = lowest_id2;
+    elseif a == 3
+        y = lowest_id3;
     end
 end
